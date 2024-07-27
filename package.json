@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "cdk8s": "^2.68.82",
-    "cdk8s-plone": "file:../cdk8s-plone",
+    "@bluedynamics/cdk8s-plone": "^0.0.4",
     "cdk8s-plus-24": "^2.12.1",
     "constructs": "^10.3.0"
   },
@@ -29,5 +29,6 @@
     "ts-jest": "^26",
     "ts-node": "^10",
     "typescript": "^4.9.5"
-  }
+  },
+  "packageManager": "pnpm@8.15.6+sha1.8105075ad0aa306138be128c017e9c41e28ecffa"
 }
