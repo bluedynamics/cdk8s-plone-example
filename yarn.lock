@@ -287,10 +287,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bluedynamics/cdk8s-plone@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@bluedynamics/cdk8s-plone/-/cdk8s-plone-0.0.6.tgz#bfd74911aa2292b2f14fb53ed216b11a5f8c794d"
-  integrity sha512-laMR8rzv6AHMqAqEi/0tdIYq7ir9cw0xd+XJ6RPDzQiRZlAUR4I8TD/cgOY/ezsz9+cPkBUqkS0KX8eDc9vERw==
+"@bluedynamics/cdk8s-plone@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@bluedynamics/cdk8s-plone/-/cdk8s-plone-0.0.7.tgz#bf3658ab791ee9e8756bb2dd704215f2c943058a"
+  integrity sha512-OTBe+ahrgrLDXVR0vBdcs7+KnU1PSYqEYz3VqpU1kLC43+ABeI7Vp8Wos77LKc+zJs0JpccXU+Vx1UasCC+fhw==
   dependencies:
     cdk8s "^2.68.87"
     cdk8s-plus-24 "^2.12.1"
