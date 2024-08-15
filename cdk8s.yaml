@@ -2,4 +2,9 @@ language: typescript
 app: npx ts-node main.ts
 imports:
   - k8s
-  - postgresqls.yaml
+  - imports/postgresqls.yaml
+  - imports/traefik.io_ingressroutes.yaml
+#  - imports/traefik.io_middlewares.yaml
+
+# Notes:
+# - https://github.com/traefik/traefik/blob/master/docs/content/reference/dynamic-configuration/

@@ -1,64 +1,33 @@
 import { Construct } from 'constructs';
 import { App, Chart, ChartProps } from 'cdk8s';
-import { Plone } from '@bluedynamics/cdk8s-plone';
+import { Plone, PloneHttpcache } from '@bluedynamics/cdk8s-plone';
 import * as kplus from 'cdk8s-plus-24';
-import * as pgop from './imports/acid.zalan.do'
+import * as path from 'path';
+import { IngressChart } from './ingress';
+import { config } from 'dotenv';
+import { PGBitnamiChart } from './postgres.bitnami';
+import { PGZalandoChart } from './postgres.zalando';
 
 export class ExampleChart extends Chart {
   constructor(scope: Construct, id: string, props: ChartProps = {}) {
     super(scope, id, props);
 
-    const mximageversion_backend = 'sha-94c84dc';
-    const mximageversion_frontend = 'sha-ffd2b1e';
+    config();
 
-    const db = new pgop.Postgresql(
-      this,
-      'db',
-      {
-        metadata: {
-          labels: {
-            'app.kubernetes.io/name': 'plone-postgresql',
-            'app.kubernetes.io/instance': 'postgresql',
-            'app.kubernetes.io/component': 'database',
-            'app.kubernetes.io/part-of': 'plone',
-          }
-        },
-        spec: {
-          numberOfInstances: 2,
-          allowedSourceRanges: ['10.0.0.0/8'],
-          postgresql: { version: pgop.PostgresqlSpecPostgresqlVersion.VALUE_15 },
-          volume: { size: '1Gi' },
-          databases: {
-            plone: 'plone',
-          },
-          teamId: 'plone',
-          users: {
-            plone: [
-              pgop.PostgresqlSpecUsers.SUPERUSER,
-              pgop.PostgresqlSpecUsers.CREATEDB,
-            ],
-          },
-          resources: {
-            limits: {
-              cpu: '1000m',
-              memory: '1Gi',
-            },
-            requests: {
-              cpu: '300m',
-              memory: '400Mi',
-            },
-          },
-        }
-      }
-    );
-    // const dbService = db.node.find(construct => {
-    //   log(construct.metadata.name);
-    //   if ((construct.kind === 'Service') && (construct.metadata.name?.endsWith('postgresql'))) {
-    //     return construct.name;
-    //   }
-    //   return undefined;
-    // });
-    const dbMDName = db.metadata.name;
+    // ================================================================================================================
+    // Postgresql
+    let db: PGBitnamiChart | PGZalandoChart;
+    if ((process.env.DATABASE ?? 'zalando') == 'bitnami') {
+      db = new PGBitnamiChart(this, 'db');
+    } else {
+      db = new PGZalandoChart(this, 'db');
+    }
+
+    // ================================================================================================================
+    // Plone
+
+    // prepare the environment variables for the plone deployment
+    const dbMDName = db.dbServiceName
     const env = new kplus.Env(
       [],
       {
@@ -73,19 +42,48 @@ export class ExampleChart extends Chart {
         INSTANCE_db_relstorage_cache_local_mb: { value: `800` },
       },
     );
-    new Plone(this, 'plone', {
+
+    // create the plone deployment and related resources
+    const plone = new Plone(this, 'plone', {
       version: 'test.version',
       backend: {
-        image: `ghcr.io/bluedynamics/mximages-plone/mx-plone-backend:${mximageversion_backend}`,
+        image: process.env.PLONE_BACKEND_IMAGE ?? 'ghcr.io/bluedynamics/mximages-plone/mx-plone-backend:main',
         environment: env,
       },
       frontend: {
-        image: `ghcr.io/bluedynamics/mximages-plone/mx-plone-frontend:${mximageversion_frontend}`,
+        image: process.env.PLONE_FRONTEND_IMAGE ?? 'ghcr.io/bluedynamics/mximages-plone/mx-plone-frontend:main',
       },
     })
+
+    // ================================================================================================================
+    // Varnish with kube-httpcache
+    const httpcache = new PloneHttpcache(
+      this,
+      'httpcache',
+      {
+        plone: plone,
+        varnishVclFile: path.join(__dirname, 'config', 'varnish.tpl.vcl'),
+      }
+    )
+
+    // ================================================================================================================
+    // Ingress
+    new IngressChart(
+      this,
+      'ingress',
+      {
+        ingressType: 'traefik',
+        issuer: process.env.CLUSTER_ISSUER ?? 'letsencrypt-prod',
+        domainCached: process.env.DOMAIN_CACHED ?? 'mxplone-cached.example.com',
+        domainUncached: process.env.DOMAIN_UNCACHED ?? 'mxplone-cached.example.com',
+        domainMaintenance: process.env.DOMAIN_UNCACHED ?? 'mxplone-maintenance.example.com',
+        backendServiceName: plone.backendServiceName,
+        frontendServiceName: plone.frontendServiceName ?? '',
+        httpcacheServiceName: httpcache.httpcacheServiceName,
+      });
   }
 }
 
 const app = new App();
-new ExampleChart(app, 'cdk8s-plone-example');
+new ExampleChart(app, 'example');
 app.synth();
