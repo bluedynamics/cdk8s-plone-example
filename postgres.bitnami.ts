@@ -11,7 +11,7 @@ export class PGBitnamiChart extends Construct {
         const dbuser = 'plone';
         const dbpass = 'admin@plone';
 
-        const db = new Helm(this, 'pg', {
+        const db = new Helm(this, 'db', {
             chart: 'postgresql',
             repo: 'https://charts.bitnami.com/bitnami',
             // XXX: in fact I do not want a namespace here.
