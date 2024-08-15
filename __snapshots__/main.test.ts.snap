@@ -1,3 +1,987 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Placeholder Empty 1`] = `Array []`;
+exports[`Placeholder Empty 1`] = `
+Array [
+  Object {
+    "apiVersion": "acid.zalan.do/v1",
+    "kind": "postgresql",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/component": "database",
+        "app.kubernetes.io/instance": "postgresql",
+        "app.kubernetes.io/name": "plone-postgresql",
+        "app.kubernetes.io/part-of": "plone",
+      },
+      "name": "test-chart-db-c879c687",
+    },
+    "spec": Object {
+      "allowedSourceRanges": Array [
+        "10.0.0.0/8",
+      ],
+      "databases": Object {
+        "plone": "plone",
+      },
+      "numberOfInstances": 2,
+      "postgresql": Object {
+        "version": "15",
+      },
+      "resources": Object {
+        "limits": Object {
+          "cpu": "1000m",
+          "memory": "1Gi",
+        },
+        "requests": Object {
+          "cpu": "300m",
+          "memory": "400Mi",
+        },
+      },
+      "teamId": "plone",
+      "users": Object {
+        "plone": Array [
+          "superuser",
+          "createdb",
+        ],
+      },
+      "volume": Object {
+        "size": "1Gi",
+      },
+    },
+  },
+  Object {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/component": "backend",
+        "app.kubernetes.io/name": "plone-backend-deployment",
+      },
+      "name": "test-chart-plone-backend-deployment-c8a3055e",
+    },
+    "spec": Object {
+      "replicas": 2,
+      "selector": Object {
+        "matchLabels": Object {
+          "app": "test-chart-plone-backend-c8848738",
+        },
+      },
+      "template": Object {
+        "metadata": Object {
+          "labels": Object {
+            "app": "test-chart-plone-backend-c8848738",
+            "app.kubernetes.io/component": "backend",
+            "app.kubernetes.io/managed-by": "cdk8s-plone",
+            "app.kubernetes.io/name": "plone-backend",
+            "app.kubernetes.io/part-of": "plone",
+            "app.kubernetes.io/version": "test.version",
+          },
+        },
+        "spec": Object {
+          "containers": Array [
+            Object {
+              "env": Array [
+                Object {
+                  "name": "SECRET_POSTGRESQL_USERNAME",
+                  "valueFrom": Object {
+                    "secretKeyRef": Object {
+                      "key": "username",
+                      "name": "plone.test-chart-db-c879c687.credentials.postgresql.acid.zalan.do",
+                    },
+                  },
+                },
+                Object {
+                  "name": "SECRET_POSTGRESQL_PASSWORD",
+                  "valueFrom": Object {
+                    "secretKeyRef": Object {
+                      "key": "password",
+                      "name": "plone.test-chart-db-c879c687.credentials.postgresql.acid.zalan.do",
+                    },
+                  },
+                },
+                Object {
+                  "name": "INSTANCE_db_storage",
+                  "value": "relstorage",
+                },
+                Object {
+                  "name": "INSTANCE_db_blob_mode",
+                  "value": "cache",
+                },
+                Object {
+                  "name": "INSTANCE_db_cache_size",
+                  "value": "5000",
+                },
+                Object {
+                  "name": "INSTANCE_db_cache_size_bytes",
+                  "value": "1500MB",
+                },
+                Object {
+                  "name": "INSTANCE_db_relstorage",
+                  "value": "postgresql",
+                },
+                Object {
+                  "name": "INSTANCE_db_relstorage_postgresql_dsn",
+                  "value": "host='test-chart-db-c879c687' dbname='plone' user='$(SECRET_POSTGRESQL_USERNAME)' password='$(SECRET_POSTGRESQL_PASSWORD)'",
+                },
+                Object {
+                  "name": "INSTANCE_db_relstorage_cache_local_mb",
+                  "value": "800",
+                },
+              ],
+              "envFrom": Array [],
+              "image": "ghcr.io/bluedynamics/mximages-plone/mx-plone-backend:main",
+              "imagePullPolicy": "IfNotPresent",
+              "livenessProbe": Object {
+                "failureThreshold": 3,
+                "httpGet": Object {
+                  "path": "/",
+                  "port": 8080,
+                },
+                "initialDelaySeconds": 30,
+                "periodSeconds": 10,
+                "successThreshold": 1,
+                "timeoutSeconds": 5,
+              },
+              "name": "backend-container",
+              "readinessProbe": Object {
+                "failureThreshold": 3,
+                "httpGet": Object {
+                  "path": "/",
+                  "port": 8080,
+                },
+                "initialDelaySeconds": 10,
+                "periodSeconds": 10,
+                "successThreshold": 1,
+                "timeoutSeconds": 15,
+              },
+              "resources": Object {
+                "limits": Object {
+                  "cpu": "500m",
+                  "memory": "512Mi",
+                },
+                "requests": Object {
+                  "cpu": "200m",
+                  "memory": "256Mi",
+                },
+              },
+            },
+          ],
+          "imagePullSecrets": Array [],
+        },
+      },
+    },
+  },
+  Object {
+    "apiVersion": "policy/v1",
+    "kind": "PodDisruptionBudget",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/managed-by": "cdk8s-plone",
+        "app.kubernetes.io/part-of": "plone",
+      },
+      "name": "test-chart-plone-backend-pdb-c8a5ffa9",
+    },
+    "spec": Object {
+      "minAvailable": 1,
+      "selector": Object {
+        "matchLabels": Object {
+          "app": "test-chart-plone-backend-c8848738",
+        },
+      },
+    },
+  },
+  Object {
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/component": "service",
+        "app.kubernetes.io/managed-by": "cdk8s-plone",
+        "app.kubernetes.io/name": "plone-backend-service",
+        "app.kubernetes.io/part-of": "plone",
+      },
+      "name": "test-chart-plone-backend-service-c81ad65d",
+    },
+    "spec": Object {
+      "ports": Array [
+        Object {
+          "name": "backend-http",
+          "port": 8080,
+          "targetPort": 8080,
+        },
+      ],
+      "selector": Object {
+        "app": "test-chart-plone-backend-c8848738",
+      },
+    },
+  },
+  Object {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/component": "frontend",
+        "app.kubernetes.io/name": "plone-frontend-deployment",
+      },
+      "name": "test-chart-plone-frontend-deployment-c83abfa4",
+    },
+    "spec": Object {
+      "replicas": 2,
+      "selector": Object {
+        "matchLabels": Object {
+          "app": "test-chart-plone-frontend-c8e96701",
+        },
+      },
+      "template": Object {
+        "metadata": Object {
+          "labels": Object {
+            "app": "test-chart-plone-frontend-c8e96701",
+            "app.kubernetes.io/component": "frontend",
+            "app.kubernetes.io/managed-by": "cdk8s-plone",
+            "app.kubernetes.io/name": "plone-frontend",
+            "app.kubernetes.io/part-of": "plone",
+            "app.kubernetes.io/version": "test.version",
+          },
+        },
+        "spec": Object {
+          "containers": Array [
+            Object {
+              "env": Array [
+                Object {
+                  "name": "RAZZLE_INTERNAL_API_PATH",
+                  "value": "http://test-chart-plone-backend-service-c81ad65d:8080/Plone",
+                },
+              ],
+              "envFrom": Array [],
+              "image": "ghcr.io/bluedynamics/mximages-plone/mx-plone-frontend:main",
+              "imagePullPolicy": "IfNotPresent",
+              "livenessProbe": Object {
+                "failureThreshold": 3,
+                "httpGet": Object {
+                  "path": "/",
+                  "port": 3000,
+                },
+                "initialDelaySeconds": 30,
+                "periodSeconds": 10,
+                "successThreshold": 1,
+                "timeoutSeconds": 5,
+              },
+              "name": "frontend-container",
+              "readinessProbe": Object {
+                "failureThreshold": 3,
+                "httpGet": Object {
+                  "path": "/",
+                  "port": 3000,
+                },
+                "initialDelaySeconds": 10,
+                "periodSeconds": 10,
+                "successThreshold": 1,
+                "timeoutSeconds": 15,
+              },
+              "resources": Object {
+                "limits": Object {
+                  "cpu": "500m",
+                  "memory": "1Gi",
+                },
+                "requests": Object {
+                  "cpu": "200m",
+                  "memory": "256Mi",
+                },
+              },
+            },
+          ],
+          "imagePullSecrets": Array [],
+        },
+      },
+    },
+  },
+  Object {
+    "apiVersion": "policy/v1",
+    "kind": "PodDisruptionBudget",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/managed-by": "cdk8s-plone",
+        "app.kubernetes.io/part-of": "plone",
+      },
+      "name": "test-chart-plone-frontend-pdb-c8069ea0",
+    },
+    "spec": Object {
+      "minAvailable": 1,
+      "selector": Object {
+        "matchLabels": Object {
+          "app": "test-chart-plone-frontend-c8e96701",
+        },
+      },
+    },
+  },
+  Object {
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/component": "service",
+        "app.kubernetes.io/managed-by": "cdk8s-plone",
+        "app.kubernetes.io/name": "plone-frontend-service",
+        "app.kubernetes.io/part-of": "plone",
+      },
+      "name": "test-chart-plone-frontend-service-c874cc1a",
+    },
+    "spec": Object {
+      "ports": Array [
+        Object {
+          "name": "backend-http",
+          "port": 3000,
+          "targetPort": 3000,
+        },
+      ],
+      "selector": Object {
+        "app": "test-chart-plone-frontend-c8e96701",
+      },
+    },
+  },
+  Object {
+    "apiVersion": "policy/v1",
+    "kind": "PodDisruptionBudget",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/instance": "test-chart-httpcache-c89dd29d",
+        "app.kubernetes.io/managed-by": "Helm",
+        "app.kubernetes.io/name": "kube-httpcache",
+        "app.kubernetes.io/version": "v0.8.1",
+        "helm.sh/chart": "kube-httpcache-0.8.1",
+      },
+      "name": "test-chart-httpcache-c89dd29d-kube-httpcache",
+    },
+    "spec": Object {
+      "maxUnavailable": 1,
+      "selector": Object {
+        "matchLabels": Object {
+          "app.kubernetes.io/instance": "test-chart-httpcache-c89dd29d",
+          "app.kubernetes.io/name": "kube-httpcache",
+        },
+      },
+    },
+  },
+  Object {
+    "apiVersion": "v1",
+    "kind": "ServiceAccount",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/instance": "test-chart-httpcache-c89dd29d",
+        "app.kubernetes.io/managed-by": "Helm",
+        "app.kubernetes.io/name": "kube-httpcache",
+        "app.kubernetes.io/version": "v0.8.1",
+        "helm.sh/chart": "kube-httpcache-0.8.1",
+      },
+      "name": "test-chart-httpcache-c89dd29d-kube-httpcache",
+    },
+  },
+  Object {
+    "apiVersion": "v1",
+    "data": Object {
+      "secret": "NmgzSzh0cEs4RmsxSDhSYTZzWUd5blpqbk1ySFdrMzk=",
+    },
+    "kind": "Secret",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/instance": "test-chart-httpcache-c89dd29d",
+        "app.kubernetes.io/managed-by": "Helm",
+        "app.kubernetes.io/name": "kube-httpcache",
+        "app.kubernetes.io/version": "v0.8.1",
+        "helm.sh/chart": "kube-httpcache-0.8.1",
+      },
+      "name": "test-chart-httpcache-c89dd29d-kube-httpcache",
+    },
+    "type": "Opaque",
+  },
+  Object {
+    "apiVersion": "v1",
+    "data": Object {
+      "default.vcl.tmpl": "vcl 4.0;
+
+import std;
+import directors;
+
+probe ploneBackendProbe {
+    .url = \\"/ok\\";
+    .timeout = 5s;
+    .interval = 15s;
+    .window = 10;
+    .threshold = 8;
+    # .initial = 3;
+}
+backend ploneBackend {
+    .host = \\"{{ .Env.BACKEND_SERVICE_NAME }}\\";
+    .port = \\"{{ .Env.BACKEND_SERVICE_PORT }}\\";
+    .probe = ploneBackendProbe;
+    .connect_timeout = 0.5s;
+    .first_byte_timeout = 120s;
+    .between_bytes_timeout = 60s;
+}
+
+probe ploneFrontendProbe {
+    .url = \\"/ok\\";
+    .timeout = 5s;
+    .interval = 15s;
+    .window = 10;
+    .threshold = 8;
+    # .initial = 3;
+}
+backend ploneFrontend {
+    .host = \\"{{ .Env.FRONTEND_SERVICE_NAME }}\\";
+    .port = \\"{{ .Env.FRONTEND_SERVICE_PORT }}\\";
+    .probe = ploneFrontendProbe;
+    .connect_timeout = 0.5s;
+    .first_byte_timeout = 120s;
+    .between_bytes_timeout = 60s;
+}
+
+/* Only allow PURGE from kubernetes network */
+acl purge {
+  \\"10.0.0.0/8\\";
+}
+
+sub detect_debug{
+  # Requests with X-Varnish-Debug will display additional
+  # information about requests
+  unset req.http.x-vcl-debug;
+  # Should be changed after switch to live
+  #if (req.http.x-varnish-debug) {
+  #    set req.http.x-vcl-debug = false;
+  #}
+  set req.http.x-vcl-debug = true;
+}
+
+sub detect_auth{
+  unset req.http.x-auth;
+  if (
+      (req.http.Cookie && (
+        req.http.Cookie ~ \\"__ac(_(name|password|persistent))?=\\" || req.http.Cookie ~ \\"_ZopeId\\" || req.http.Cookie ~ \\"auth_token\\")) ||
+      (req.http.Authenticate) ||
+      (req.http.Authorization)
+  ) {
+    set req.http.x-auth = true;
+  }
+}
+
+sub detect_requesttype{
+  unset req.http.x-varnish-reqtype;
+  set req.http.x-varnish-reqtype = \\"Default\\";
+  if (req.http.x-auth){
+    set req.http.x-varnish-reqtype = \\"auth\\";
+  } elseif (req.url ~ \\"\\\\/@@(images|download|)\\\\/?(.*)?$\\"){
+    set req.http.x-varnish-reqtype = \\"blob\\";
+  } elseif (req.url ~ \\"\\\\/\\\\+\\\\+api\\\\+\\\\+/?(.*)?$\\") {
+    set req.http.x-varnish-reqtype = \\"api\\";
+  } else {
+    set req.http.x-varnish-reqtype = \\"express\\";
+  }
+}
+
+sub process_redirects{
+  if (req.http.x-redirect-to) {
+    return (synth(301, req.http.x-redirect-to));
+  }
+}
+
+sub vcl_init {
+  new lbPloneBackend = directors.round_robin();
+  lbPloneBackend.add_backend(ploneBackend);
+
+  new lbPloneFrontend = directors.round_robin();
+  lbPloneFrontend.add_backend(ploneFrontend);
+}
+
+sub vcl_recv {
+  # Annotate request with x-vcl-debug
+  call detect_debug;
+
+  # Annotate request with x-auth indicating if request is authenticated or not
+  call detect_auth;
+
+  # Annotate request with x-varnish-reqtype with a classification for the request
+  call detect_requesttype;
+
+  # Process redirects
+  call process_redirects;
+
+  # Routing: set the current Varnish backend to the matching Plone backend
+  # Attention:
+  # Confusing wording, we have two possible Varnish backends: the Plone frontend and the Plone backend *sigh*
+  if ((req.url ~ \\"^/\\\\+\\\\+api\\\\+\\\\+\\") || (req.http.x-varnish-reqtype ~ \\"blob\\")) {
+    set req.http.x-vcl-plone = \\"Backend\\";
+    set req.backend_hint = lbPloneBackend.backend();
+    # here we need a rewrite to add the virtualhost part of the URL for the Plone Backend
+    set req.http.x-vcl-proto = \\"http\\";
+    if (req.http.X-Forwarded-Proto) {
+      set req.http.x-vcl-proto = req.http.X-Forwarded-Proto;
+    }
+    set req.url = \\"/VirtualHostBase/\\" + req.http.x-vcl-proto + \\"/\\" + req.http.host + \\"/Plone/VirtualHostRoot\\" + req.url;
+  } else {
+    set req.http.x-vcl-plone = \\"Frontend\\";
+    set req.backend_hint = lbPloneFrontend.backend();
+  }
+
+  # short cut authenticated requests to pass
+  if (req.http.x-auth) {
+    return(pass);
+  }
+
+  # Sanitize cookies so they do not needlessly destroy cacheability for anonymous pages
+  if (req.http.Cookie) {
+    set req.http.Cookie = \\";\\" + req.http.Cookie;
+    set req.http.Cookie = regsuball(req.http.Cookie, \\"; +\\", \\";\\");
+    set req.http.Cookie = regsuball(req.http.Cookie, \\";(sticky|I18N_LANGUAGE|statusmessages|__ac|_ZopeId|__cp|beaker\\\\.session|authomatic|serverid|__rf|auth_token)=\\", \\"; \\\\1=\\");
+    set req.http.Cookie = regsuball(req.http.Cookie, \\";[^ ][^;]*\\", \\"\\");
+    set req.http.Cookie = regsuball(req.http.Cookie, \\"^[; ]+|[; ]+$\\", \\"\\");
+
+    if (req.http.Cookie == \\"\\") {
+        unset req.http.Cookie;
+    }
+  }
+
+  # Handle the different request types
+  if (req.method == \\"PURGE\\") {
+      if (!client.ip ~ purge) {
+          return (synth(405, \\"Not allowed.\\"));
+      } else {
+          ban(\\"req.url == \\" + req.url);
+          return (synth(200, \\"Purged.\\"));
+      }
+
+  } elseif (req.method == \\"BAN\\") {
+      # Same ACL check as above:
+      if (!client.ip ~ purge) {
+          return (synth(405, \\"Not allowed.\\"));
+      }
+      ban(\\"req.http.host == \\" + req.http.host + \\"&& req.url == \\" + req.url);
+      # Throw a synthetic page so the
+      # request won't go to the backend.
+      return (synth(200, \\"Ban added\\"));
+
+  } elseif (req.method != \\"GET\\" &&
+      req.method != \\"HEAD\\" &&
+      req.method != \\"PUT\\" &&
+      req.method != \\"POST\\" &&
+      req.method != \\"PATCH\\" &&
+      req.method != \\"TRACE\\" &&
+      req.method != \\"OPTIONS\\" &&
+      req.method != \\"DELETE\\") {
+      /* Non-RFC2616 or CONNECT which is weird. */
+      return (pipe);
+  } elseif (req.method != \\"GET\\" &&
+      req.method != \\"HEAD\\" &&
+      req.method != \\"OPTIONS\\") {
+      /* POST, PUT, PATCH will pass, always */
+      return(pass);
+  }
+
+  return(hash);
+}
+
+sub vcl_pipe {
+  /* This is not necessary if you do not do any request rewriting. */
+  set req.http.connection = \\"close\\";
+}
+
+sub vcl_purge {
+  return (synth(200, \\"PURGE: \\" + req.url + \\" - \\" + req.hash));
+}
+
+sub vcl_synth {
+  if (resp.status == 301) {
+    set resp.http.location = resp.reason;
+    set resp.reason = \\"Moved\\";
+    return (deliver);
+  }
+}
+
+sub vcl_hit {
+  if (obj.ttl >= 0s) {
+    // A pure unadulterated hit, deliver it
+    return (deliver);
+  } elsif (obj.ttl + obj.grace > 0s) {
+    // Object is in grace, deliver it
+    // Automatically triggers a background fetch
+    return (deliver);
+  } else {
+    return (restart);
+  }
+}
+
+
+sub vcl_backend_response {
+  # Annotate request with info about the backend used
+  set beresp.http.x-varnish-plone-part = bereq.http.x-vcl-plone;
+  # set beresp.http.x-varnish-plone-proto = bereq.http.x-vcl-proto;
+  # set beresp.http.x-varnish-plone-host = bereq.http.x-vcl-host;
+  # Don't allow static files to set cookies.
+  # (?i) denotes case insensitive in PCRE (perl compatible regular expressions).
+  # make sure you edit both and keep them equal.
+  if (bereq.url ~ \\"(?i)\\\\.(pdf|asc|dat|txt|doc|xls|ppt|tgz|png|gif|jpeg|jpg|ico|swf|css|js)(\\\\?.*)?$\\") {
+    unset beresp.http.set-cookie;
+  }
+  if (beresp.http.Set-Cookie) {
+    set beresp.http.x-varnish-action = \\"FETCH (pass - response sets cookie)\\";
+    set beresp.uncacheable = true;
+    set beresp.ttl = 120s;
+    return(deliver);
+  }
+  if (beresp.http.Cache-Control ~ \\"(private|no-cache|no-store)\\") {
+    set beresp.http.x-varnish-action = \\"FETCH (pass - cache control disallows)\\";
+    set beresp.uncacheable = true;
+    set beresp.ttl = 120s;
+    return(deliver);
+  }
+
+  # if (beresp.http.Authorization && !beresp.http.Cache-Control ~ \\"public\\") {
+  # Do NOT cache if there is an \\"Authorization\\" header
+  # beresp never has an Authorization header in beresp, right?
+  if (beresp.http.Authorization) {
+    set beresp.http.x-varnish-action = \\"FETCH (pass - authorized and no public cache control)\\";
+    set beresp.uncacheable = true;
+    set beresp.ttl = 120s;
+    return(deliver);
+  }
+
+  # Use this rule IF no cache-control (SSR content)
+  if ((bereq.http.x-varnish-reqtype ~ \\"express\\") && (!beresp.http.Cache-Control)) {
+    set beresp.http.x-varnish-action = \\"INSERT (30s caching / 60s grace)\\";
+    set beresp.uncacheable = false;
+    set beresp.ttl = 30s;
+    set beresp.grace = 60s;
+    return(deliver);
+  }
+
+  if (!beresp.http.Cache-Control) {
+    set beresp.http.x-varnish-action = \\"FETCH (override - backend not setting cache control)\\";
+    set beresp.uncacheable = true;
+    set beresp.ttl = 120s;
+    return (deliver);
+  }
+
+  if (beresp.http.X-Anonymous && !beresp.http.Cache-Control) {
+    set beresp.http.x-varnish-action = \\"FETCH (override - anonymous backend not setting cache control)\\";
+    set beresp.ttl = 600s;
+    return (deliver);
+  }
+
+  set beresp.http.x-varnish-action = \\"FETCH (insert)\\";
+  return (deliver);
+}
+
+sub vcl_deliver {
+
+  if (req.http.x-vcl-debug) {
+    set resp.http.x-varnish-ttl = obj.ttl;
+    set resp.http.x-varnish-grace = obj.grace;
+    set resp.http.x-hits = obj.hits;
+    set resp.http.x-varnish-reqtype = req.http.x-varnish-reqtype;
+    if (req.http.x-auth) {
+      set resp.http.x-auth = \\"Logged-in\\";
+    } else {
+      set resp.http.x-auth = \\"Anon\\";
+    }
+    if (obj.hits > 0) {
+      set resp.http.x-cache = \\"HIT\\";
+    } else {
+      set resp.http.x-cache = \\"MISS\\";
+    }
+  } else {
+    unset resp.http.x-varnish-action;
+    unset resp.http.x-cache-operation;
+    unset resp.http.x-cache-rule;
+    unset resp.http.x-powered-by;
+  }
+}
+",
+    },
+    "kind": "ConfigMap",
+    "metadata": Object {
+      "name": "test-chart-httpcache-c89dd29d-kube-httpcache",
+    },
+  },
+  Object {
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/instance": "test-chart-httpcache-c89dd29d",
+        "app.kubernetes.io/managed-by": "Helm",
+        "app.kubernetes.io/name": "kube-httpcache",
+        "app.kubernetes.io/version": "v0.8.1",
+        "helm.sh/chart": "kube-httpcache-0.8.1",
+      },
+      "name": "test-chart-httpcache-c89dd29d-kube-httpcache",
+    },
+    "spec": Object {
+      "ports": Array [
+        Object {
+          "name": "http",
+          "port": 80,
+          "protocol": "TCP",
+          "targetPort": 8080,
+        },
+        Object {
+          "name": "signaller",
+          "port": 8090,
+          "targetPort": 8090,
+        },
+        Object {
+          "name": "metrics",
+          "port": 9131,
+          "targetPort": 9131,
+        },
+      ],
+      "selector": Object {
+        "app.kubernetes.io/instance": "test-chart-httpcache-c89dd29d",
+        "app.kubernetes.io/name": "kube-httpcache",
+      },
+      "type": "ClusterIP",
+    },
+  },
+  Object {
+    "apiVersion": "apps/v1",
+    "kind": "StatefulSet",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/instance": "test-chart-httpcache-c89dd29d",
+        "app.kubernetes.io/managed-by": "Helm",
+        "app.kubernetes.io/name": "kube-httpcache",
+        "app.kubernetes.io/version": "v0.8.1",
+        "helm.sh/chart": "kube-httpcache-0.8.1",
+      },
+      "name": "test-chart-httpcache-c89dd29d-kube-httpcache",
+    },
+    "spec": Object {
+      "replicas": 2,
+      "selector": Object {
+        "matchLabels": Object {
+          "app.kubernetes.io/instance": "test-chart-httpcache-c89dd29d",
+          "app.kubernetes.io/name": "kube-httpcache",
+        },
+      },
+      "serviceName": "test-chart-httpcache-c89dd29d-kube-httpcache",
+      "template": Object {
+        "metadata": Object {
+          "labels": Object {
+            "app.kubernetes.io/instance": "test-chart-httpcache-c89dd29d",
+            "app.kubernetes.io/name": "kube-httpcache",
+          },
+        },
+        "spec": Object {
+          "containers": Array [
+            Object {
+              "args": Array [
+                "-admin-addr=0.0.0.0",
+                "-admin-port=6083",
+                "-signaller-enable",
+                "-signaller-port=8090",
+                "-frontend-port=8080",
+                "-frontend-watch=false",
+                "-frontend-namespace=$(NAMESPACE)",
+                "-frontend-service=test-chart-httpcache-c89dd29d-kube-httpcache",
+                "-backend-watch=false",
+                "-backend-namespace=$(NAMESPACE)",
+                "-backend-service=backend-service",
+                "-varnish-secret-file=/etc/varnish/k8s-secret/secret",
+                "-varnish-vcl-template=/etc/varnish/tmpl/default.vcl.tmpl",
+                "-varnish-storage=malloc,128M",
+                "-varnish-vcl-template-poll",
+              ],
+              "env": Array [
+                Object {
+                  "name": "NAMESPACE",
+                  "valueFrom": Object {
+                    "fieldRef": Object {
+                      "fieldPath": "metadata.namespace",
+                    },
+                  },
+                },
+                Object {
+                  "name": "BACKEND_SERVICE_NAME",
+                  "value": "test-chart-plone-backend-service-c81ad65d",
+                },
+                Object {
+                  "name": "BACKEND_SERVICE_PORT",
+                  "value": "8080",
+                },
+                Object {
+                  "name": "BACKEND_SITE_ID",
+                  "value": "Plone",
+                },
+                Object {
+                  "name": "FRONTEND_SERVICE_NAME",
+                  "value": "test-chart-plone-frontend-service-c874cc1a",
+                },
+                Object {
+                  "name": "FRONTEND_SERVICE_PORT",
+                  "value": "3000",
+                },
+              ],
+              "image": "quay.io/mittwald/kube-httpcache:stable",
+              "imagePullPolicy": "IfNotPresent",
+              "name": "kube-httpcache",
+              "resources": Object {
+                "limits": Object {
+                  "cpu": "500m",
+                  "memory": "500Mi",
+                },
+                "requests": Object {
+                  "cpu": "100m",
+                  "memory": "100Mi",
+                },
+              },
+              "securityContext": Object {},
+              "volumeMounts": Array [
+                Object {
+                  "mountPath": "/etc/varnish/tmpl",
+                  "name": "template",
+                },
+                Object {
+                  "mountPath": "/etc/varnish/k8s-secret",
+                  "name": "secret",
+                },
+                Object {
+                  "mountPath": "/var/lib/varnish",
+                  "name": "var",
+                },
+              ],
+            },
+            Object {
+              "args": Array [
+                "-no-exit",
+              ],
+              "command": Array [
+                "/exporter/prometheus_varnish_exporter",
+              ],
+              "env": Array [
+                Object {
+                  "name": "VSM_NOPID",
+                  "value": "1",
+                },
+              ],
+              "image": "quay.io/mittwald/kube-httpcache:stable",
+              "imagePullPolicy": "IfNotPresent",
+              "name": "exporter",
+              "ports": Array [
+                Object {
+                  "containerPort": 9131,
+                  "name": "metrics",
+                },
+              ],
+              "resources": Object {
+                "limits": Object {
+                  "cpu": "100m",
+                  "memory": "100Mi",
+                },
+                "requests": Object {
+                  "cpu": "10m",
+                  "memory": "50Mi",
+                },
+              },
+              "securityContext": Object {},
+              "volumeMounts": Array [
+                Object {
+                  "mountPath": "/var/lib/varnish",
+                  "name": "var",
+                },
+              ],
+            },
+          ],
+          "nodeSelector": Object {
+            "kubernetes.io/arch": "amd64",
+          },
+          "securityContext": Object {},
+          "serviceAccountName": "test-chart-httpcache-c89dd29d-kube-httpcache",
+          "volumes": Array [
+            Object {
+              "configMap": Object {
+                "name": "test-chart-httpcache-c89dd29d-kube-httpcache",
+              },
+              "name": "template",
+            },
+            Object {
+              "name": "secret",
+              "secret": Object {
+                "secretName": "test-chart-httpcache-c89dd29d-kube-httpcache",
+              },
+            },
+            Object {
+              "emptyDir": Object {},
+              "name": "var",
+            },
+          ],
+        },
+      },
+    },
+  },
+  Object {
+    "apiVersion": "monitoring.coreos.com/v1",
+    "kind": "ServiceMonitor",
+    "metadata": Object {
+      "labels": Object {
+        "app.kubernetes.io/instance": "test-chart-httpcache-c89dd29d",
+        "app.kubernetes.io/managed-by": "Helm",
+        "app.kubernetes.io/name": "kube-httpcache",
+        "app.kubernetes.io/version": "v0.8.1",
+        "helm.sh/chart": "kube-httpcache-0.8.1",
+      },
+      "name": "test-chart-httpcache-c89dd29d-kube-httpcache",
+    },
+    "spec": Object {
+      "endpoints": Array [
+        Object {
+          "interval": "10s",
+          "path": "/metrics",
+          "port": "metrics",
+        },
+        Object {
+          "interval": "10s",
+          "path": "/metrics",
+          "port": "signaller",
+        },
+      ],
+      "selector": Object {
+        "matchLabels": Object {
+          "app.kubernetes.io/instance": "test-chart-httpcache-c89dd29d",
+          "app.kubernetes.io/name": "kube-httpcache",
+        },
+      },
+    },
+  },
+  Object {
+    "apiVersion": "networking.k8s.io/v1",
+    "kind": "Ingress",
+    "metadata": Object {
+      "annotations": Object {
+        "cert-manager.io/cluster-issuer": "letsencrypt-cluster-issuer",
+        "kubernetes.io/ingress.class": "traefik",
+      },
+      "name": "test-chart-ingress-main-cached-c8b108e1",
+    },
+    "spec": Object {
+      "ingressClassName": "traefik",
+      "rules": Array [
+        Object {
+          "host": "mxplone-cached.redblue.kup.tirol",
+          "http": Object {
+            "paths": Array [
+              Object {
+                "backend": Object {
+                  "service": Object {
+                    "name": "test-chart-httpcache-c89dd29d-kube-httpcache",
+                    "port": Object {
+                      "number": 80,
+                    },
+                  },
+                },
+                "path": "/",
+                "pathType": "Prefix",
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+]
+`;
