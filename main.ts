@@ -85,5 +85,5 @@ export class ExampleChart extends Chart {
 }
 
 const app = new App();
-new ExampleChart(app, 'example');
+new ExampleChart(app, 'plone-example');
 app.synth();

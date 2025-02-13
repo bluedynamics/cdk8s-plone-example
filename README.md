@@ -43,7 +43,7 @@ cdk8s synth
 
 Apply with kubectl
 ```bash
-kubectl apply cdk8s.yaml
+kubectl apply dist/example.k8s.yaml
 ```
 
 ## TODO/WIP
