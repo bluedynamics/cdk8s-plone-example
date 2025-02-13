@@ -40,6 +40,10 @@ Generate with
 ```bash
 cdk8s synth
 ```
+or
+```bash
+yarn synth
+```
 
 Apply with kubectl
 ```bash
@@ -48,10 +52,10 @@ kubectl apply dist/example.k8s.yaml
 
 ## TODO/WIP
 
-- add Traefik Ingress for uncached and maintenance
-- solve namespace problem with bitnami chart (see below)
-- more configuration parameters in `.env`.
-- better documnetation
+- [x] add Traefik Ingress for uncached and maintenance
+- [ ] solve namespace problem with bitnami chart (see below)
+- [ ] more configuration parameters in `.env`.
+- [ ] better documnetation
 
 ## Notes
 

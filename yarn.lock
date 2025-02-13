@@ -287,14 +287,14 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bluedynamics/cdk8s-plone@^0.0.21":
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/@bluedynamics/cdk8s-plone/-/cdk8s-plone-0.0.21.tgz#0af85ebc2665ee34981b801f8199e321d33e39b3"
-  integrity sha512-lytl8oaf+6cojnlO5x3QJIy1FZm6hFrZattuP9wsDdWFN9oyVt7Sf4WNFaif0LELSEwdeW+qHeDIxx4cQlZRVg==
+"@bluedynamics/cdk8s-plone@^0.0.63":
+  version "0.0.63"
+  resolved "https://registry.yarnpkg.com/@bluedynamics/cdk8s-plone/-/cdk8s-plone-0.0.63.tgz#b2be42a5653258723a3c96802c95e2410d8c5b8f"
+  integrity sha512-JWJ+NLCzz9ugJTsQTJsaWM84uQInVszEYCneFnKhsZkT7K24zSnARDV29LyELVDdnE8KtpPZtT0AIJ9UqBpdtQ==
   dependencies:
-    cdk8s "^2.68.94"
-    cdk8s-plus-24 "^2.12.1"
-    constructs "^10.3.0"
+    cdk8s "^2.69.39"
+    cdk8s-plus-29 "^2.5.21"
+    constructs "^10.0.0"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
@@ -1087,17 +1087,17 @@ cdk8s-cli@^2.198.188:
     yaml "2.5.0"
     yargs "^15"
 
-cdk8s-plus-24@^2.12.1:
-  version "2.12.1"
-  resolved "https://registry.npmjs.org/cdk8s-plus-24/-/cdk8s-plus-24-2.12.1.tgz"
-  integrity sha512-R7pJnR3riVINwJzgEbPdPlr662Lasz3IB630+O7xL5Ylu31eLCqCNO3vdIgI5l49qbSui8xD7MBxlhTdsu3/MA==
-  dependencies:
-    minimatch "^3.1.2"
-
 cdk8s-plus-28@^2.4.0:
   version "2.5.0"
   resolved "https://registry.npmjs.org/cdk8s-plus-28/-/cdk8s-plus-28-2.5.0.tgz"
   integrity sha512-FULuBtCeq5COFwwDel55Pq9Bm7fMJ+Ra5r7m8yMihWvHY9PBHcfbzgOxiy0Mf2pPsBBMFWEz8IhsqBJ4c1/ehQ==
+  dependencies:
+    minimatch "^3.1.2"
+
+cdk8s-plus-29@^2.5.21:
+  version "2.5.21"
+  resolved "https://registry.yarnpkg.com/cdk8s-plus-29/-/cdk8s-plus-29-2.5.21.tgz#d7dd4292fda485005e44079efdc286602fba50a8"
+  integrity sha512-wDXxPkUNNEzcd7eJ5yiB6LQShOhl4MhJWGquNfrcGW7z7rNevrWpq5OQEknQojjtHXhjSIqg0zia6Vr+2otZag==
   dependencies:
     minimatch "^3.1.2"
 
@@ -1109,6 +1109,15 @@ cdk8s@^2.68.94, cdk8s@^2.68.95:
     fast-json-patch "^3.1.1"
     follow-redirects "^1.15.6"
     yaml "2.5.0"
+
+cdk8s@^2.69.39:
+  version "2.69.40"
+  resolved "https://registry.yarnpkg.com/cdk8s/-/cdk8s-2.69.40.tgz#3a3447dc22c3ab13b348bcac7e27845cb409ffc5"
+  integrity sha512-Ht2rysYwDROWqJCAFqqfDo/2tATrtMe9ibS7kXpSzarDO9h/l55AjyMGeWY7TAszdXGJCQTKOhVudvO1yAnhxQ==
+  dependencies:
+    fast-json-patch "^3.1.1"
+    follow-redirects "^1.15.9"
+    yaml "2.7.0"
 
 chalk@^2.4.2:
   version "2.4.2"
@@ -1265,6 +1274,11 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
+
+constructs@^10.0.0:
+  version "10.4.2"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.4.2.tgz#e875a78bef932cca12ea63965969873a25c1c132"
+  integrity sha512-wsNxBlAott2qg8Zv87q3eYZYgheb9lchtBfjHzzLHtXbttwSrHPs1NNQbBrmbb1YZvYg2+Vh0Dor76w4mFxJkA==
 
 constructs@^10.3.0:
   version "10.3.0"
@@ -1713,6 +1727,11 @@ follow-redirects@^1.15.6:
   version "1.15.6"
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.6.tgz"
   integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
+
+follow-redirects@^1.15.9:
+  version "1.15.9"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
+  integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
 
 for-in@^1.0.2:
   version "1.0.2"
@@ -4142,6 +4161,11 @@ yaml@2.5.0:
   version "2.5.0"
   resolved "https://registry.npmjs.org/yaml/-/yaml-2.5.0.tgz"
   integrity sha512-2wWLbGbYDiSqqIKoPjar3MPgB94ErzCtrNE1FdqGuaO0pi2JGjmE8aW8TDZwzU7vuxcGRdL/4gPQwQ7hD5AMSw==
+
+yaml@2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.7.0.tgz#aef9bb617a64c937a9a748803786ad8d3ffe1e98"
+  integrity sha512-+hSoy/QHluxmC9kCIJyL/uyFmLmc+e5CFR5Wa+bpIhIj85LVb9ZH2nVnqrHoSvKogwODv0ClqZkmiSSaIH5LTA==
 
 yargs-parser@20.x, yargs-parser@^20.2.2:
   version "20.2.9"

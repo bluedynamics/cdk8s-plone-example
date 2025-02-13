@@ -1,12 +1,13 @@
 import { Construct } from 'constructs';
 import { App, Chart, ChartProps } from 'cdk8s';
 import { Plone, PloneHttpcache } from '@bluedynamics/cdk8s-plone';
-import * as kplus from 'cdk8s-plus-24';
+import * as kplus from 'cdk8s-plus-29';
 import * as path from 'path';
 import { IngressChart } from './ingress';
 import { config } from 'dotenv';
 import { PGBitnamiChart } from './postgres.bitnami';
 import { PGZalandoChart } from './postgres.zalando';
+
 
 export class ExampleChart extends Chart {
   constructor(scope: Construct, id: string, props: ChartProps = {}) {
@@ -17,10 +18,10 @@ export class ExampleChart extends Chart {
     // ================================================================================================================
     // Postgresql
     let db: PGBitnamiChart | PGZalandoChart;
-    if ((process.env.DATABASE ?? 'zalando') == 'bitnami') {
-      db = new PGBitnamiChart(this, 'db');
-    } else {
+    if ((process.env.DATABASE ?? 'bitnami') == 'zalando') {
       db = new PGZalandoChart(this, 'db');
+    } else {
+      db = new PGBitnamiChart(this, 'db');
     }
 
     // ================================================================================================================
@@ -83,6 +84,7 @@ export class ExampleChart extends Chart {
       });
   }
 }
+
 
 const app = new App();
 new ExampleChart(app, 'plone-example');
