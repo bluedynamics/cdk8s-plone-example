@@ -1,11 +1,13 @@
-# example how to use cdk8s-plone
+# Example: How to use cdk8s-plone
 
 This is an example how to use the [@bluedynamics/cdk8s-plone](https://www.npmjs.com/package/@bluedynamics/cdk8s-plone) typescript package.
 
 ## Preparation
 
 Configure node like so: `nvm use lts/*`
+
 The run `yarn install`.
+
 Have `./node_modules/.bin` in your PATH (or use `yarn run synth` below).
 
 
@@ -39,7 +41,10 @@ Generate with
 cdk8s synth
 ```
 
-apply with kubectl
+Apply with kubectl
+```bash
+kubectl apply cdk8s.yaml
+```
 
 ## TODO/WIP
 
