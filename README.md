@@ -57,6 +57,9 @@ kubectl apply dist/example.k8s.yaml
 - [ ] more configuration parameters in `.env`.
 - [ ] better documnetation
 
+## Ingress
+The default domain is `mxplone-cached.example.com`, this should be changed 
+
 ## Notes
 
 Bitnami Helm chart at the moment needs a namespace `plone` to be present.
