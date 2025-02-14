@@ -18,22 +18,29 @@ export class ExampleChart extends Chart {
     // ================================================================================================================
     // Postgresql
     let db: PGBitnamiChart | PGZalandoChart;
+    let postgresql_username;
+    let postgresql_password;
     if ((process.env.DATABASE ?? 'bitnami') == 'zalando') {
       db = new PGZalandoChart(this, 'db');
+      postgresql_username =  { valueFrom: { secretKeyRef: { name: `plone.${db.dbServiceName}.credentials.postgresql.acid.zalan.do`, key: 'username' }}};
+      postgresql_password = { valueFrom: { secretKeyRef: { name: `plone.${db.dbServiceName}.credentials.postgresql.acid.zalan.do`, key: 'password' }}};
     } else {
       db = new PGBitnamiChart(this, 'db');
+      postgresql_username = { value: 'plone' };
+      postgresql_password = { valueFrom: { secretKeyRef: { name: `${db.dbServiceName}`, key: 'password' }}};
     }
 
     // ================================================================================================================
     // Plone
+
 
     // prepare the environment variables for the plone deployment
     const dbMDName = db.dbServiceName
     const env = new kplus.Env(
       [],
       {
-        SECRET_POSTGRESQL_USERNAME: { valueFrom: { secretKeyRef: { name: `plone.${dbMDName}.credentials.postgresql.acid.zalan.do`, key: 'username' }}},
-        SECRET_POSTGRESQL_PASSWORD: { valueFrom: { secretKeyRef: { name: `plone.${dbMDName}.credentials.postgresql.acid.zalan.do`, key: 'password' }}},
+        SECRET_POSTGRESQL_USERNAME: postgresql_username,
+        SECRET_POSTGRESQL_PASSWORD: postgresql_password,
         INSTANCE_db_storage: { value: `relstorage` },
         INSTANCE_db_blob_mode: { value: `cache` },
         INSTANCE_db_cache_size: { value: `5000` },
