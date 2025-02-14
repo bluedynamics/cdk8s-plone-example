@@ -60,6 +60,7 @@ export class ExampleChart extends Chart {
       },
       frontend: {
         image: process.env.PLONE_FRONTEND_IMAGE ?? 'ghcr.io/bluedynamics/mximages-plone/mx-plone-frontend:main',
+        readinessEnabled: false,
       },
     })
 
