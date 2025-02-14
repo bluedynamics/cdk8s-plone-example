@@ -65,7 +65,8 @@ The default domain is `mxplone-cached.example.com`
 
 ## Zalando vs Bitnami
 - Both Charts are useable, but Bitnami doesnt need and operator and needs therfore no prerequisites
-- Zalando needs the CDR `postgresql.yaml` to be found here in `imports/postgresql.yaml` or from the official zalando/postgres-operator github repo.
+- Zalando needs the CDR `postgresql.yaml` to be found here in `imports/postgresql.yaml`, could be outdated, or from the official zalando/postgres-operator github repo.
+    - [Github - Zalando](https://github.com/zalando/postgres-operator/blob/master/charts/postgres-operator/crds/postgresqls.yaml)
 - These CDRs needs to be installed BEFORE the plone-example.
 
 ## Notes
