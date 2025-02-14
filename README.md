@@ -58,7 +58,15 @@ kubectl apply dist/example.k8s.yaml
 - [ ] better documnetation
 
 ## Ingress
-The default domain is `mxplone-cached.example.com`, this should be changed 
+The default domain is `mxplone-cached.example.com`
+
+- For local testing portforward the wanted service
+- The Ingress in the current configuration will use the HTTP cache. If you don’t want to use it, add the desired Plone service instead.
+
+## Zalando vs Bitnami
+- Both Charts are useable, but Bitnami doesnt need and operator and needs therfore no prerequisites
+- Zalando needs the CDR `postgresql.yaml` to be found here in `imports/postgresql.yaml` or from the official zalando/postgres-operator github repo.
+- These CDRs needs to be installed BEFORE the plone-example.
 
 ## Notes
 
