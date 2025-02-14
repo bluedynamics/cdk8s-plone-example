@@ -1,12 +1,13 @@
 import { Construct } from 'constructs';
 import { App, Chart, ChartProps } from 'cdk8s';
 import { Plone, PloneHttpcache } from '@bluedynamics/cdk8s-plone';
-import * as kplus from 'cdk8s-plus-24';
+import * as kplus from 'cdk8s-plus-29';
 import * as path from 'path';
 import { IngressChart } from './ingress';
 import { config } from 'dotenv';
 import { PGBitnamiChart } from './postgres.bitnami';
 import { PGZalandoChart } from './postgres.zalando';
+
 
 export class ExampleChart extends Chart {
   constructor(scope: Construct, id: string, props: ChartProps = {}) {
@@ -17,22 +18,29 @@ export class ExampleChart extends Chart {
     // ================================================================================================================
     // Postgresql
     let db: PGBitnamiChart | PGZalandoChart;
-    if ((process.env.DATABASE ?? 'zalando') == 'bitnami') {
-      db = new PGBitnamiChart(this, 'db');
-    } else {
+    let postgresql_username;
+    let postgresql_password;
+    if ((process.env.DATABASE ?? 'bitnami') == 'zalando') {
       db = new PGZalandoChart(this, 'db');
+      postgresql_username =  { valueFrom: { secretKeyRef: { name: `plone.${db.dbServiceName}.credentials.postgresql.acid.zalan.do`, key: 'username' }}};
+      postgresql_password = { valueFrom: { secretKeyRef: { name: `plone.${db.dbServiceName}.credentials.postgresql.acid.zalan.do`, key: 'password' }}};
+    } else {
+      db = new PGBitnamiChart(this, 'db');
+      postgresql_username = { value: 'plone' };
+      postgresql_password = { valueFrom: { secretKeyRef: { name: `${db.dbServiceName}`, key: 'password' }}};
     }
 
     // ================================================================================================================
     // Plone
+
 
     // prepare the environment variables for the plone deployment
     const dbMDName = db.dbServiceName
     const env = new kplus.Env(
       [],
       {
-        SECRET_POSTGRESQL_USERNAME: { valueFrom: { secretKeyRef: { name: `plone.${dbMDName}.credentials.postgresql.acid.zalan.do`, key: 'username' }}},
-        SECRET_POSTGRESQL_PASSWORD: { valueFrom: { secretKeyRef: { name: `plone.${dbMDName}.credentials.postgresql.acid.zalan.do`, key: 'password' }}},
+        SECRET_POSTGRESQL_USERNAME: postgresql_username,
+        SECRET_POSTGRESQL_PASSWORD: postgresql_password,
         INSTANCE_db_storage: { value: `relstorage` },
         INSTANCE_db_blob_mode: { value: `cache` },
         INSTANCE_db_cache_size: { value: `5000` },
@@ -52,6 +60,7 @@ export class ExampleChart extends Chart {
       },
       frontend: {
         image: process.env.PLONE_FRONTEND_IMAGE ?? 'ghcr.io/bluedynamics/mximages-plone/mx-plone-frontend:main',
+        readinessEnabled: false,
       },
     })
 
@@ -84,6 +93,7 @@ export class ExampleChart extends Chart {
   }
 }
 
+
 const app = new App();
-new ExampleChart(app, 'example');
+new ExampleChart(app, 'plone-example');
 app.synth();

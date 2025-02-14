@@ -1,11 +1,13 @@
-# example how to use cdk8s-plone
+# Example: How to use cdk8s-plone
 
 This is an example how to use the [@bluedynamics/cdk8s-plone](https://www.npmjs.com/package/@bluedynamics/cdk8s-plone) typescript package.
 
 ## Preparation
 
 Configure node like so: `nvm use lts/*`
+
 The run `yarn install`.
+
 Have `./node_modules/.bin` in your PATH (or use `yarn run synth` below).
 
 
@@ -38,15 +40,34 @@ Generate with
 ```bash
 cdk8s synth
 ```
+or
+```bash
+yarn synth
+```
 
-apply with kubectl
+Apply with kubectl
+```bash
+kubectl apply dist/example.k8s.yaml
+```
 
 ## TODO/WIP
 
-- add Traefik Ingress for uncached and maintenance
-- solve namespace problem with bitnami chart (see below)
-- more configuration parameters in `.env`.
-- better documnetation
+- [x] add Traefik Ingress for uncached and maintenance
+- [ ] solve namespace problem with bitnami chart (see below)
+- [ ] more configuration parameters in `.env`.
+- [ ] better documnetation
+
+## Ingress
+The default domain is `mxplone-cached.example.com`
+
+- For local testing portforward the wanted service
+- The Ingress in the current configuration will use the HTTP cache. If you don’t want to use it, add the desired Plone service instead.
+
+## Zalando vs Bitnami
+- Both Charts are useable, but Bitnami doesnt need and operator and needs therfore no prerequisites
+- Zalando needs the CDR `postgresql.yaml` to be found here in `imports/postgresql.yaml`, could be outdated, or from the official zalando/postgres-operator github repo.
+    - [Github - Zalando](https://github.com/zalando/postgres-operator/blob/master/charts/postgres-operator/crds/postgresqls.yaml)
+- These CDRs needs to be installed BEFORE the plone-example.
 
 ## Notes
 
