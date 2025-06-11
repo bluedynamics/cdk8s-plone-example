@@ -85,7 +85,7 @@ export class ExampleChart extends Chart {
         issuer: process.env.CLUSTER_ISSUER ?? 'letsencrypt-prod',
         domainCached: process.env.DOMAIN_CACHED ?? 'mxplone-cached.example.com',
         domainUncached: process.env.DOMAIN_UNCACHED ?? 'mxplone-cached.example.com',
-        domainMaintenance: process.env.DOMAIN_UNCACHED ?? 'mxplone-maintenance.example.com',
+        domainMaintenance: process.env.DOMAIN_MAINTENANCE ?? 'mxplone-maintenance.example.com',
         backendServiceName: plone.backendServiceName,
         frontendServiceName: plone.frontendServiceName ?? '',
         httpcacheServiceName: httpcache.httpcacheServiceName,

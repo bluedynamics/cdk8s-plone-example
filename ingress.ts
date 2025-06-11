@@ -1,6 +1,6 @@
 import { Construct } from 'constructs';
 import *  as k8s from './imports/k8s';
-//import *  as traefik  from '../imports/traefi,io';
+import * as traefik from './imports/traefik.io';
 
 export interface IngressOptions {
 
@@ -71,6 +71,23 @@ export class IngressChart extends Construct {
                 options.httpcacheServiceName,
                 80,
             );
+            this.traefikIngress(
+                'main',
+                'uncached',
+                options.domainUncached,
+                `/`,
+                options.frontendServiceName,
+                3000,
+            );
+            this.traefikIngress(
+                'main',
+                'maintenance',
+                options.domainMaintenance,
+                `/`,
+                options.backendServiceName,
+                8080,
+                `/VirtualHostBase/https/${options.domainMaintenance}/VirtualHostRoot/`
+            );
         } else if (options.ingressType === 'kong') {
 
             // Create the ingress for the cached (main) domain
@@ -120,13 +137,24 @@ export class IngressChart extends Construct {
     }
 
     traefikIngress(prefix: string, postfix: string, domain: string, path: string, backendServiceName: string, backendPort: number, rewrite?: string) {
-        var annotations: { [key: string]: string } = {
+           var annotations: { [key: string]: string } = {
             'kubernetes.io/ingress.class': 'traefik',
             'cert-manager.io/cluster-issuer': this.issuer,
         };
         if (rewrite !== undefined) {
-            throw new Error('rewrite not yet supported for traefik');
+            const rewritemw = new traefik.Middleware(this, `${prefix}-${postfix}-addprefix`,
+                {
+                metadata: {},
+                    spec: {
+                        addPrefix: {
+                            prefix: rewrite,
+                        },
+                    },
+                }
+            );
+            annotations['traefik.ingress.kubernetes.io/router.middlewares'] = `plone-${rewritemw.name}@kubernetescrd`;
         }
+
         new k8s.KubeIngress(this, `${prefix}-${postfix}`, {
             metadata: {
                 annotations: annotations,
